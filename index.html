@@ -4,12 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nobode • Projects</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #c03a21; /* Deep Red/Orange */
             --secondary: #e6dfd1; /* Light Beige/Off-white */
             --text: #333130; /* Dark Gray/Brown */
             --dark: #1a1a1a; /* Near Black */
+            --card-bg: rgba(51, 49, 48, 0.05); /* Use text color with alpha for card bg */
+            --card-border: rgba(51, 49, 48, 0.1);
+            --intro-bg: rgba(51, 49, 48, 0.03); /* Slightly different for intro */
             --transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
@@ -26,6 +30,7 @@
             height: 100%;
             overflow-x: hidden;
             cursor: default;
+            scroll-behavior: smooth; /* Added smooth scroll */
         }
 
         body {
@@ -39,26 +44,48 @@
 
         /* Navigation */
         nav {
-            position: fixed;
+            position: fixed; /* Changed back to fixed */
             top: 0;
+            left: 0; /* Ensure it spans full width */
             width: 100%;
             padding: 1rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
             z-index: 1000;
-            mix-blend-mode: difference; /* Keep difference for contrast */
+            background: rgba(var(--secondary-rgb, 230, 223, 209), 0.8); /* Default fallback RGB */
+            backdrop-filter: blur(5px); /* Add blur effect */
+            border-bottom: 1px solid rgba(var(--text-rgb, 51, 49, 48), 0.05); /* Default fallback RGB */
+            transition: background-color 0.3s, border-color 0.3s; /* Smooth transitions */
         }
+
+        /* Define RGB versions of colors for RGBA backgrounds */
+         body {
+             --secondary-rgb: 230, 223, 209;
+             --text-rgb: 51, 49, 48;
+             --dark-rgb: 26, 26, 26;
+         }
+         body.dark-mode {
+             --secondary-rgb: 26, 26, 26;
+             --text-rgb: 230, 223, 209;
+             --dark-rgb: 51, 49, 48;
+         }
+         body.dark-mode nav {
+              border-bottom-color: rgba(var(--text-rgb), 0.1);
+         }
+
 
         .logo svg path, .logo svg circle {
-             /* Apply color variable to logo parts */
             stroke: var(--primary);
             fill: var(--primary);
+             transition: var(--transition);
         }
-        .logo svg path[fill="none"] { /* Ensure stroke-only paths remain so */
+        .logo svg path[fill="none"] {
             fill: none;
         }
-
+        .logo:hover svg path, .logo:hover svg circle {
+             transform: scale(1.02); /* Subtle hover effect on logo */
+        }
 
         .menu-actions {
             display: flex;
@@ -99,30 +126,160 @@
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 6rem 1rem 2rem;
-            min-height: 100vh;
+            padding: 6rem 1rem 2rem; /* Initial padding top */
+            min-height: 100vh; /* Ensure container pushes footer down */
         }
+
+        /* Landing Intro Section */
+        .landing-intro {
+            text-align: center;
+            margin-bottom: 4rem; /* Space below this intro */
+            padding: 2rem 1rem;
+            opacity: 0; /* Hidden initially */
+            transform: translateY(20px);
+            transition: opacity 1s ease 0.2s, transform 1s ease 0.2s; /* Slightly delayed transition */
+        }
+        .landing-intro.visible {
+             opacity: 1;
+             transform: translateY(0);
+        }
+
+        .landing-intro h1 {
+            font-size: 2.8rem; /* Large main title */
+            font-weight: 700; /* Bolder */
+            color: var(--text);
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.5px;
+             line-height: 1.1;
+             text-shadow: 1px 1px 2px rgba(0,0,0,0.05); /* Subtle shadow */
+        }
+        .landing-intro h1 span { /* Style 'and' */
+             font-weight: 400;
+             font-size: 1.8rem; /* Smaller 'and' */
+             color: var(--primary);
+             opacity: 0.8;
+             margin: 0 0.2em;
+        }
+
+
+        .landing-intro h2 {
+            font-size: 2.2rem; /* Large NOBODE */
+            font-weight: 700;
+            color: var(--primary); /* Primary color */
+            margin-bottom: 0.75rem;
+            letter-spacing: 0.1em; /* Wider spacing */
+             text-transform: uppercase;
+        }
+
+        .landing-intro .subtitle {
+            font-size: 1rem;
+            font-weight: normal;
+            color: var(--text);
+            opacity: 0.7;
+            margin-bottom: 1.5rem;
+            letter-spacing: 0.05em;
+        }
+
+        .landing-intro .description {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            max-width: 750px;
+            margin: 0 auto;
+            opacity: 0.9;
+            color: var(--text);
+        }
+        .landing-intro .description strong {
+            font-weight: 700; /* Bolder */
+            color: var(--primary);
+             opacity: 1.0;
+        }
+
+         /* Dark Mode Landing Intro */
+         body.dark-mode .landing-intro h1,
+         body.dark-mode .landing-intro .subtitle,
+         body.dark-mode .landing-intro .description {
+              color: var(--text); /* Ensure light text */
+         }
+         body.dark-mode .landing-intro .description strong {
+              color: var(--primary); /* Keep primary highlight */
+          }
+
+        /* Original Intro Section */
+        .intro-section {
+            padding: 3rem 1.5rem;
+            margin-bottom: 3rem;
+            background: var(--intro-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 6px;
+            text-align: center;
+            opacity: 0; /* Hidden initially */
+            transform: translateY(20px);
+            transition: opacity 0.8s ease 0.5s, transform 0.8s ease 0.5s; /* Delayed transition */
+        }
+        .intro-section.visible {
+             opacity: 1;
+             transform: translateY(0);
+        }
+
+        .intro-section h1 { /* Changed from h2 to h1 for semantics */
+            font-size: 1.8rem;
+            font-weight: normal;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            letter-spacing: 0.5px;
+        }
+        .intro-section h1 span {
+             font-size: 1rem;
+             opacity: 0.7;
+             margin-left: 0.5em;
+        }
+
+        .intro-section p {
+            font-size: 1rem;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto 1.5rem auto;
+            opacity: 0.9;
+        }
+
+        .intro-section strong {
+             font-weight: bold;
+             color: var(--primary);
+             opacity: 0.9;
+        }
+
+         .intro-section .themes {
+              font-size: 0.9rem;
+              font-style: italic;
+              opacity: 0.7;
+              margin-top: 1rem;
+         }
 
         /* Projects Grid */
         .projects-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             gap: 2rem;
-            margin-top: 2rem;
         }
 
         .project-card {
-            background: rgba(51, 49, 48, 0.05); /* Subtle dark bg for cards */
-            border: 1px solid rgba(51, 49, 48, 0.1); /* Subtle border */
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
             border-radius: 4px;
             padding: 1.5rem;
             cursor: pointer;
             position: relative;
             overflow: hidden;
-            height: 280px; /* Fixed height for alignment */
-            display: flex; /* Use flexbox for content alignment */
-            flex-direction: column; /* Stack content vertically */
+            height: 280px;
+            display: flex;
+            flex-direction: column;
             transition: var(--transition);
+             opacity: 0; /* Hidden initially for stagger animation */
+             transform: translateY(10px);
+        }
+        .project-card.visible { /* Staggered animation class */
+             opacity: 1;
+             transform: translateY(0);
         }
 
 
@@ -142,7 +299,7 @@
         .project-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 15px 25px rgba(0, 0, 0, 0.05);
-            border-color: rgba(192, 58, 33, 0.3); /* Primary color border on hover */
+            border-color: rgba(192, 58, 33, 0.3);
         }
 
         .project-card:hover::before {
@@ -152,7 +309,7 @@
         .project-card-content {
              position: relative;
              z-index: 2;
-             flex-grow: 1; /* Allow content to fill space */
+             flex-grow: 1;
              display: flex;
              flex-direction: column;
         }
@@ -170,17 +327,17 @@
             margin-bottom: 0.75rem;
             font-weight: normal;
             letter-spacing: -0.02em;
-            color: var(--text); /* Ensure text color applies */
-             flex-shrink: 0; /* Prevent title from shrinking */
+            color: var(--text);
+            flex-shrink: 0;
         }
 
         .project-desc {
             font-size: 0.9rem;
             opacity: 0.7;
             line-height: 1.5;
-            color: var(--text); /* Ensure text color applies */
-            flex-grow: 1; /* Allow desc to take remaining space */
-             margin-bottom: 1.5rem; /* Ensure space before symbol */
+            color: var(--text);
+            flex-grow: 1;
+             margin-bottom: 1.5rem;
         }
 
         .project-symbol {
@@ -191,11 +348,11 @@
             height: 24px;
             opacity: 0.5;
             transition: var(--transition);
-            z-index: 2; /* Ensure symbol is above gradient */
+            z-index: 2;
         }
          .project-symbol path, .project-symbol circle, .project-symbol rect {
-             stroke: var(--primary); /* Use primary color for stroke */
-             fill: var(--primary); /* Use primary color for fill if needed */
+             stroke: var(--primary);
+             fill: var(--primary);
          }
          .project-symbol path[fill="none"] {
              fill: none;
@@ -214,7 +371,8 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: var(--secondary); /* Use secondary color for modal bg */
+            background: rgba(var(--secondary-rgb), 0.9); /* Use RGBA */
+            backdrop-filter: blur(5px);
             z-index: 2000;
             display: flex;
             align-items: center;
@@ -229,18 +387,26 @@
             pointer-events: all;
         }
 
-        .modal-content-wrapper { /* Renamed for clarity */
-            background: var(--secondary); /* Ensure wrapper has background */
-            color: var(--text); /* Ensure text color */
+        .modal-content-wrapper {
+            background: var(--secondary);
+            color: var(--text);
             width: 90%;
             max-width: 900px;
             max-height: 90vh;
             overflow-y: auto;
             padding: 2rem;
             position: relative;
-            border-radius: 4px; /* Optional: add border radius */
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1); /* Optional: add shadow */
+            border-radius: 4px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            transform: scale(0.95);
+            opacity: 0;
+            transition: transform 0.4s ease, opacity 0.4s ease;
         }
+        .modal.active .modal-content-wrapper {
+            transform: scale(1);
+            opacity: 1;
+        }
+
 
         .close-modal {
             position: absolute;
@@ -253,7 +419,7 @@
             height: 30px;
             opacity: 0.6;
             transition: var(--transition);
-             z-index: 2001; /* Ensure close button is on top */
+             z-index: 2001;
         }
 
         .close-modal:hover {
@@ -288,18 +454,18 @@
 
         .project-image {
             width: 100%;
-            max-width: 400px; /* Limit image width */
+            max-width: 400px;
             height: auto;
-            margin: 0 auto 1.5rem auto; /* Center image */
-            display: block; /* Ensure block display for centering */
+            margin: 0 auto 1.5rem auto;
+            display: block;
             opacity: 0.9;
-            border-radius: 4px; /* Optional: match card radius */
+            border-radius: 4px;
         }
 
         .project-content {
             line-height: 1.6;
             margin-bottom: 2rem;
-            color: var(--text); /* Ensure text color */
+            color: var(--text);
         }
         .project-content p {
             margin-bottom: 1rem;
@@ -316,12 +482,14 @@
 
         /* Footer */
         footer {
-            padding: 2rem 1rem;
+            padding: 3rem 1rem 2rem;
             text-align: center;
-            opacity: 0.5;
+            opacity: 0.6;
             font-size: 0.8rem;
             letter-spacing: 0.05em;
-            color: var(--text); /* Ensure footer text color */
+            color: var(--text);
+            margin-top: 3rem;
+            border-top: 1px solid var(--card-border);
         }
 
         footer svg {
@@ -336,19 +504,6 @@
          footer svg path[fill="none"] {
               fill: none;
          }
-
-
-        /* Helper Classes */
-        .hidden {
-            opacity: 0;
-            transform: translateY(10px);
-            transition: opacity 0.6s ease, transform 0.6s ease; /* Smoother transition */
-        }
-
-        .visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
 
         /* Dark Mode Toggle */
         .mode-toggle {
@@ -368,35 +523,49 @@
 
         /* Dark Mode Styles */
         body.dark-mode {
-            --secondary: #1a1a1a; /* Dark background */
-            --text: #e6dfd1; /* Light text */
-            --dark: #333130; /* Slightly lighter dark shade */
+            --secondary: #1a1a1a;
+            --text: #e6dfd1;
+            --dark: #333130;
+            --card-bg: rgba(230, 223, 209, 0.05);
+            --card-border: rgba(230, 223, 209, 0.1);
+            --intro-bg: rgba(230, 223, 209, 0.03);
         }
 
-        body.dark-mode .project-card {
-            background: rgba(230, 223, 209, 0.05); /* Light subtle bg for cards in dark mode */
-            border: 1px solid rgba(230, 223, 209, 0.1); /* Light subtle border */
-        }
+         body.dark-mode .modal {
+             background: rgba(var(--dark-rgb), 0.9);
+         }
 
-        body.dark-mode .modal, body.dark-mode .modal-content-wrapper {
-             background: var(--dark); /* Use dark color for modal bg */
-             color: var(--text); /* Ensure light text */
+        body.dark-mode .modal-content-wrapper {
+             background: var(--dark);
+             color: var(--text);
         }
 
 
         /* Responsive */
         @media (max-width: 768px) {
+             .container {
+                 padding-top: 5rem;
+             }
+              .landing-intro h1 { font-size: 2.2rem; }
+              .landing-intro h1 span { font-size: 1.5rem; }
+              .landing-intro h2 { font-size: 1.8rem; }
+              .landing-intro .subtitle { font-size: 0.9rem; }
+              .landing-intro .description { font-size: 1rem; }
+
+             .intro-section h1 {
+                 font-size: 1.5rem;
+             }
+             .intro-section p {
+                  font-size: 0.95rem;
+             }
+
             .projects-grid {
                 grid-template-columns: 1fr;
             }
 
             .project-card {
-                height: auto; /* Adjust height for mobile */
-                min-height: 220px; /* Ensure minimum height */
-            }
-
-            .container {
-                padding-top: 5rem;
+                height: auto;
+                min-height: 220px;
             }
 
              .project-detail-title {
@@ -406,6 +575,22 @@
                   font-size: 0.95rem;
              }
         }
+
+         @media (max-width: 480px) {
+              .container {
+                  padding: 4rem 0.5rem 1rem;
+              }
+               .landing-intro { padding: 1rem 0.5rem; margin-bottom: 2rem;}
+               .landing-intro h1 { font-size: 1.8rem; }
+               .landing-intro h1 span { font-size: 1.2rem; }
+               .landing-intro h2 { font-size: 1.5rem; letter-spacing: 0.05em;}
+               .landing-intro .subtitle { font-size: 0.8rem; }
+               .landing-intro .description { font-size: 0.9rem; }
+               .intro-section {
+                    padding: 2rem 1rem;
+               }
+         }
+
 
         /* Loader */
         .loader {
@@ -473,7 +658,6 @@
             50% { transform: scale(0.8); }
         }
     </style>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <!-- Loader -->
@@ -486,17 +670,17 @@
 
     <!-- Navigation -->
     <nav>
-        <a href="#" class="logo"> <!-- Make logo a link -->
+        <a href="#" class="logo">
             <svg width="120" height="40" viewBox="0 0 314 80" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <!-- Nobode Logo SVG -->
-                 <path d="M58.5 14L97.7942 77H19.2058L58.5 14Z" fill="none" stroke="var(--primary)" stroke-width="8"/>
-                 <circle cx="58.5" cy="45.5" r="10.5" fill="var(--primary)"/>
-                 <path d="M120 30H130C140 30 145 35 145 45C145 55 140 60 130 60H120V30ZM130 52C134 52 136 50 136 45C136 40 134 38 130 38H128V52H130Z" fill="var(--primary)"/>
-                 <path d="M150 30H173V38H159V41H170V49H159V52H173V60H150V30Z" fill="var(--primary)"/>
-                 <path d="M180 30H190V47C190 50 192 52 195 52C198 52 200 50 200 47V30H210V47C210 55 204 61 195 61C186 61 180 55 180 47V30Z" fill="var(--primary)"/>
-                 <path d="M215 30H235C240 30 245 35 245 40C245 45 241 48 238 49L246 60H235L228 50H225V60H215V30ZM234 42C236 42 237 41 237 39C237 37 236 36 234 36H225V42H234Z" fill="var(--primary)"/>
-                 <path d="M250 30H270C275 30 280 35 280 40C280 45 276 48 273 49L281 60H270L263 50H260V60H250V30ZM269 42C271 42 272 41 272 39C272 37 271 36 269 36H260V42H269Z" fill="var(--primary)"/>
-                 <path d="M285 30H314V38H304V60H294V38H285V30Z" fill="var(--primary)"/>
+                 <path d="M58.5 14L97.7942 77H19.2058L58.5 14Z" fill="none"/>
+                 <circle cx="58.5" cy="45.5" r="10.5"/>
+                 <path d="M120 30H130C140 30 145 35 145 45C145 55 140 60 130 60H120V30ZM130 52C134 52 136 50 136 45C136 40 134 38 130 38H128V52H130Z"/>
+                 <path d="M150 30H173V38H159V41H170V49H159V52H173V60H150V30Z"/>
+                 <path d="M180 30H190V47C190 50 192 52 195 52C198 52 200 50 200 47V30H210V47C210 55 204 61 195 61C186 61 180 55 180 47V30Z"/>
+                 <path d="M215 30H235C240 30 245 35 245 40C245 45 241 48 238 49L246 60H235L228 50H225V60H215V30ZM234 42C236 42 237 41 237 39C237 37 236 36 234 36H225V42H234Z"/>
+                 <path d="M250 30H270C275 30 280 35 280 40C280 45 276 48 273 49L281 60H270L263 50H260V60H250V30ZM269 42C271 42 272 41 272 39C272 37 271 36 269 36H260V42H269Z"/>
+                 <path d="M285 30H314V38H304V60H294V38H285V30Z"/>
              </svg>
         </a>
         <div class="menu-actions">
@@ -508,6 +692,32 @@
 
     <!-- Main Content -->
     <div class="container">
+
+        <!-- NEW Landing Intro Section -->
+        <div class="landing-intro hidden">
+            <h1>The Sediment <span>and</span> The Loom</h1>
+            <h2>NOBODE</h2>
+            <p class="subtitle">A Media Archaeology of the Generative AI Assemblage</p>
+            <p class="description">
+                Exploring the layered traces of digital presence (<strong>Sediment</strong>) woven through the structured processes of computation (<strong>Loom</strong>). This collection investigates temporality, interaction, and digital being within the complex network of modern generative systems.
+            </p>
+        </div>
+        <!-- End of NEW Landing Intro Section -->
+
+        <!-- Original Intro Section -->
+        <div class="intro-section hidden">
+             <h1>Project Collection Overview <span>• MMXXV</span></h1>
+             <p>
+                 12 interactive audiovisual systems exploring time, emergence, and digital being.
+                 Experience <strong>Cellular Automata</strong>, <strong>temporal slicing</strong>, reactive <strong>sonification</strong>,
+                 and live <strong>interaction</strong> shaping evolving digital traces.
+             </p>
+              <p class="themes">
+                  Themes: Persistence, Identity, Hauntology, Generative Aesthetics, Sovereignty.
+              </p>
+        </div>
+
+
         <div class="projects-grid">
             <!-- Project 1 -->
             <div class="project-card hidden" data-project="01">
@@ -824,6 +1034,8 @@
         const body = document.body;
         const loader = document.querySelector('.loader');
         const modeToggle = document.querySelector('.mode-toggle');
+        const landingIntro = document.querySelector('.landing-intro'); // Select new intro
+        const introSection = document.querySelector('.intro-section'); // Existing intro
         const projectCards = document.querySelectorAll('.project-card');
         const projectModal = document.getElementById('projectModal');
         const modalContentWrapper = projectModal.querySelector('.modal-content-wrapper'); // Target wrapper
@@ -839,13 +1051,21 @@
                 loader.classList.add('hidden');
                 body.classList.add('loaded');
 
-                // Animate project cards
+                 // Animate landing intro first
+                 landingIntro.classList.add('visible');
+
+                 // Animate existing intro section after landing intro
+                 setTimeout(() => {
+                     introSection.classList.add('visible');
+                 }, 300); // Delay after landing intro appears
+
+                // Animate project cards after intros
                 projectCards.forEach((card, index) => {
                     setTimeout(() => {
                         card.classList.add('visible');
-                    }, 100 * (index + 1));
+                    }, 600 + 100 * index); // Delay after existing intro appears
                 });
-            }, 1500);
+            }, 1500); // Keep loader duration
 
             // Event Listeners
             modeToggle.addEventListener('click', toggleDarkMode);
@@ -872,16 +1092,43 @@
                 }
             });
 
-            // Check for saved color mode
-            const savedMode = localStorage.getItem('darkMode');
-            if (savedMode === 'true') {
-                body.classList.add('dark-mode');
-            }
+             // Check for saved color mode & set RGB vars initially
+             const savedMode = localStorage.getItem('darkMode');
+             if (savedMode === 'true') {
+                 body.classList.add('dark-mode');
+             }
+             setRgbVars(); // Set vars after potential dark mode class is added
         }
+
+         function setRgbVars() {
+             // Ensure this runs after styles are applied
+             requestAnimationFrame(() => {
+                  const styles = getComputedStyle(document.body);
+                  document.body.style.setProperty('--secondary-rgb', colorToRgbString(styles.getPropertyValue('--secondary').trim()));
+                  document.body.style.setProperty('--text-rgb', colorToRgbString(styles.getPropertyValue('--text').trim()));
+                  document.body.style.setProperty('--dark-rgb', colorToRgbString(styles.getPropertyValue('--dark').trim()));
+             });
+         }
+
+
+         function colorToRgbString(color) {
+             // Basic conversion for hex/named/rgb colors
+             const tempDiv = document.createElement('div');
+             tempDiv.style.color = color;
+             tempDiv.style.display = 'none'; // Keep it out of layout flow
+             document.body.appendChild(tempDiv);
+             const rgbColor = getComputedStyle(tempDiv).color;
+             document.body.removeChild(tempDiv);
+
+             const match = rgbColor.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*[\d.]+)?\)/);
+             return match ? `${match[1]}, ${match[2]}, ${match[3]}` : '0, 0, 0'; // Default black
+         }
+
 
         function toggleDarkMode() {
             body.classList.toggle('dark-mode');
             localStorage.setItem('darkMode', body.classList.contains('dark-mode'));
+            setRgbVars(); // Update RGB vars on toggle
         }
 
         function openProjectModal(projectId) {
@@ -898,8 +1145,17 @@
         }
 
         function closeProjectModal() {
-            projectModal.classList.remove('active');
-            body.style.overflow = ''; // Restore background scroll
+             const wrapper = projectModal.querySelector('.modal-content-wrapper');
+             if (wrapper) {
+                 // Start exit animation before removing class
+                 wrapper.style.transform = 'scale(0.95)';
+                 wrapper.style.opacity = '0';
+             }
+             // Delay removing the active class to allow animation to play
+             setTimeout(() => {
+                projectModal.classList.remove('active');
+                body.style.overflow = ''; // Restore background scroll
+             }, 400); // Match transition duration
         }
 
         // Initialize on load

@@ -6,20 +6,20 @@
     <title>Nobode • Projects</title>
     <style>
         :root {
-            --primary: #c03a21;
-            --secondary: #e6dfd1;
-            --text: #333130;
-            --dark: #1a1a1a;
+            --primary: #c03a21; /* Deep Red/Orange */
+            --secondary: #e6dfd1; /* Light Beige/Off-white */
+            --text: #333130; /* Dark Gray/Brown */
+            --dark: #1a1a1a; /* Near Black */
             --transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
-        
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Space Mono', monospace;
+            font-family: 'Space Mono', monospace; /* Using Space Mono */
         }
-        
+
         body, html {
             background-color: var(--secondary);
             color: var(--text);
@@ -27,16 +27,16 @@
             overflow-x: hidden;
             cursor: default;
         }
-        
+
         body {
             opacity: 0;
             transition: opacity 1.5s ease;
         }
-        
+
         body.loaded {
             opacity: 1;
         }
-        
+
         /* Navigation */
         nav {
             position: fixed;
@@ -47,20 +47,25 @@
             justify-content: space-between;
             align-items: center;
             z-index: 1000;
-            mix-blend-mode: difference;
+            mix-blend-mode: difference; /* Keep difference for contrast */
         }
-        
-        .logo {
-            height: 2rem;
-            opacity: 0.9;
-            transition: var(--transition);
+
+        .logo svg path, .logo svg circle {
+             /* Apply color variable to logo parts */
+            stroke: var(--primary);
+            fill: var(--primary);
         }
-        
-        .logo:hover {
-            opacity: 1;
-            transform: scale(1.05);
+        .logo svg path[fill="none"] { /* Ensure stroke-only paths remain so */
+            fill: none;
         }
-        
+
+
+        .menu-actions {
+            display: flex;
+            align-items: center;
+        }
+
+
         .eye {
             display: inline-block;
             width: 24px;
@@ -71,7 +76,7 @@
             position: relative;
             transition: var(--transition);
         }
-        
+
         .eye::after {
             content: '';
             position: absolute;
@@ -84,12 +89,12 @@
             transform: translate(-50%, -50%);
             transition: var(--transition);
         }
-        
-        .menu-icon:hover .eye::after {
+
+        .mode-toggle:hover .eye::after {
             width: 12px;
             height: 12px;
         }
-        
+
         /* Main content */
         .container {
             max-width: 1200px;
@@ -97,7 +102,7 @@
             padding: 6rem 1rem 2rem;
             min-height: 100vh;
         }
-        
+
         /* Projects Grid */
         .projects-grid {
             display: grid;
@@ -105,19 +110,22 @@
             gap: 2rem;
             margin-top: 2rem;
         }
-        
+
         .project-card {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(51, 49, 48, 0.05); /* Subtle dark bg for cards */
+            border: 1px solid rgba(51, 49, 48, 0.1); /* Subtle border */
             border-radius: 4px;
             padding: 1.5rem;
             cursor: pointer;
             position: relative;
             overflow: hidden;
-            height: 280px;
+            height: 280px; /* Fixed height for alignment */
+            display: flex; /* Use flexbox for content alignment */
+            flex-direction: column; /* Stack content vertically */
             transition: var(--transition);
         }
-        
+
+
         .project-card::before {
             content: '';
             position: absolute;
@@ -128,17 +136,27 @@
             background: linear-gradient(45deg, transparent 65%, var(--primary) 95%);
             opacity: 0;
             transition: var(--transition);
+            z-index: 1;
         }
-        
+
         .project-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 15px 25px rgba(0, 0, 0, 0.05);
+            border-color: rgba(192, 58, 33, 0.3); /* Primary color border on hover */
         }
-        
+
         .project-card:hover::before {
             opacity: 0.15;
         }
-        
+
+        .project-card-content {
+             position: relative;
+             z-index: 2;
+             flex-grow: 1; /* Allow content to fill space */
+             display: flex;
+             flex-direction: column;
+        }
+
         .project-number {
             font-size: 0.8rem;
             color: var(--primary);
@@ -146,21 +164,25 @@
             font-weight: 600;
             opacity: 0.8;
         }
-        
+
         .project-title {
             font-size: 1.3rem;
             margin-bottom: 0.75rem;
             font-weight: normal;
             letter-spacing: -0.02em;
+            color: var(--text); /* Ensure text color applies */
+             flex-shrink: 0; /* Prevent title from shrinking */
         }
-        
+
         .project-desc {
             font-size: 0.9rem;
             opacity: 0.7;
-            margin-bottom: 1.5rem;
             line-height: 1.5;
+            color: var(--text); /* Ensure text color applies */
+            flex-grow: 1; /* Allow desc to take remaining space */
+             margin-bottom: 1.5rem; /* Ensure space before symbol */
         }
-        
+
         .project-symbol {
             position: absolute;
             bottom: 1.5rem;
@@ -169,13 +191,22 @@
             height: 24px;
             opacity: 0.5;
             transition: var(--transition);
+            z-index: 2; /* Ensure symbol is above gradient */
         }
-        
+         .project-symbol path, .project-symbol circle, .project-symbol rect {
+             stroke: var(--primary); /* Use primary color for stroke */
+             fill: var(--primary); /* Use primary color for fill if needed */
+         }
+         .project-symbol path[fill="none"] {
+             fill: none;
+         }
+
+
         .project-card:hover .project-symbol {
             opacity: 1;
             transform: rotate(45deg);
         }
-        
+
         /* Modal */
         .modal {
             position: fixed;
@@ -183,7 +214,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: var(--secondary);
+            background: var(--secondary); /* Use secondary color for modal bg */
             z-index: 2000;
             display: flex;
             align-items: center;
@@ -192,21 +223,25 @@
             pointer-events: none;
             transition: opacity 0.5s ease;
         }
-        
+
         .modal.active {
             opacity: 1;
             pointer-events: all;
         }
-        
-        .modal-content {
+
+        .modal-content-wrapper { /* Renamed for clarity */
+            background: var(--secondary); /* Ensure wrapper has background */
+            color: var(--text); /* Ensure text color */
             width: 90%;
             max-width: 900px;
             max-height: 90vh;
             overflow-y: auto;
             padding: 2rem;
             position: relative;
+            border-radius: 4px; /* Optional: add border radius */
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1); /* Optional: add shadow */
         }
-        
+
         .close-modal {
             position: absolute;
             top: 1rem;
@@ -218,13 +253,14 @@
             height: 30px;
             opacity: 0.6;
             transition: var(--transition);
+             z-index: 2001; /* Ensure close button is on top */
         }
-        
+
         .close-modal:hover {
             opacity: 1;
             transform: rotate(90deg);
         }
-        
+
         .close-modal::before, .close-modal::after {
             content: '';
             position: absolute;
@@ -234,34 +270,50 @@
             top: 50%;
             left: 50%;
         }
-        
+
         .close-modal::before {
             transform: translate(-50%, -50%) rotate(45deg);
         }
-        
+
         .close-modal::after {
             transform: translate(-50%, -50%) rotate(-45deg);
         }
-        
+
         .project-detail-title {
             font-size: 2rem;
             margin-bottom: 1.5rem;
             font-weight: normal;
             color: var(--primary);
         }
-        
+
         .project-image {
             width: 100%;
+            max-width: 400px; /* Limit image width */
             height: auto;
-            margin-bottom: 1.5rem;
+            margin: 0 auto 1.5rem auto; /* Center image */
+            display: block; /* Ensure block display for centering */
             opacity: 0.9;
+            border-radius: 4px; /* Optional: match card radius */
         }
-        
+
         .project-content {
             line-height: 1.6;
             margin-bottom: 2rem;
+            color: var(--text); /* Ensure text color */
         }
-        
+        .project-content p {
+            margin-bottom: 1rem;
+        }
+        .project-content a {
+             color: var(--primary);
+             text-decoration: none;
+             font-weight: bold;
+             transition: opacity 0.3s;
+        }
+        .project-content a:hover {
+             opacity: 0.8;
+        }
+
         /* Footer */
         footer {
             padding: 2rem 1rem;
@@ -269,37 +321,35 @@
             opacity: 0.5;
             font-size: 0.8rem;
             letter-spacing: 0.05em;
+            color: var(--text); /* Ensure footer text color */
         }
-        
+
         footer svg {
             width: 16px;
             height: 16px;
             margin-bottom: 0.5rem;
         }
-        
+         footer svg path, footer svg circle {
+             stroke: var(--primary);
+             fill: var(--primary);
+         }
+         footer svg path[fill="none"] {
+              fill: none;
+         }
+
+
         /* Helper Classes */
         .hidden {
             opacity: 0;
             transform: translateY(10px);
-            transition: var(--transition);
+            transition: opacity 0.6s ease, transform 0.6s ease; /* Smoother transition */
         }
-        
+
         .visible {
             opacity: 1;
             transform: translateY(0);
         }
-        
-        /* Animations */
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-        
-        .pulse {
-            animation: pulse 3s infinite ease-in-out;
-        }
-        
+
         /* Dark Mode Toggle */
         .mode-toggle {
             background: none;
@@ -311,39 +361,52 @@
             opacity: 0.7;
             transition: var(--transition);
         }
-        
+
         .mode-toggle:hover {
             opacity: 1;
         }
-        
-        .mode-toggle svg {
-            width: 20px;
-            height: 20px;
-            fill: var(--primary);
-        }
-        
+
+        /* Dark Mode Styles */
         body.dark-mode {
-            --secondary: #1a1a1a;
-            --text: #e6dfd1;
-            --dark: #333130;
+            --secondary: #1a1a1a; /* Dark background */
+            --text: #e6dfd1; /* Light text */
+            --dark: #333130; /* Slightly lighter dark shade */
         }
-        
+
+        body.dark-mode .project-card {
+            background: rgba(230, 223, 209, 0.05); /* Light subtle bg for cards in dark mode */
+            border: 1px solid rgba(230, 223, 209, 0.1); /* Light subtle border */
+        }
+
+        body.dark-mode .modal, body.dark-mode .modal-content-wrapper {
+             background: var(--dark); /* Use dark color for modal bg */
+             color: var(--text); /* Ensure light text */
+        }
+
+
         /* Responsive */
         @media (max-width: 768px) {
             .projects-grid {
                 grid-template-columns: 1fr;
             }
-            
+
             .project-card {
-                height: auto;
-                min-height: 200px;
+                height: auto; /* Adjust height for mobile */
+                min-height: 220px; /* Ensure minimum height */
             }
-            
+
             .container {
                 padding-top: 5rem;
             }
+
+             .project-detail-title {
+                 font-size: 1.6rem;
+             }
+             .project-content {
+                  font-size: 0.95rem;
+             }
         }
-        
+
         /* Loader */
         .loader {
             position: fixed;
@@ -358,18 +421,18 @@
             z-index: 9999;
             transition: opacity 0.6s ease, visibility 0.6s ease;
         }
-        
+
         .loader.hidden {
             opacity: 0;
             visibility: hidden;
         }
-        
+
         .loader-icon {
             width: 50px;
             height: 50px;
             position: relative;
         }
-        
+
         .triangle {
             width: 0;
             height: 0;
@@ -379,23 +442,32 @@
             position: absolute;
             animation: rotate 2s infinite linear;
         }
-        
+
         .eye-loader {
             width: 12px;
             height: 12px;
-            background: var(--secondary);
+            background: var(--secondary); /* Match background */
             border-radius: 50%;
             position: absolute;
-            top: 25px;
+            top: 25px; /* Adjust position within triangle */
             left: 19px;
             animation: blink 3s infinite ease-in-out;
         }
-        
+
+        /* Dark mode loader adjustments */
+        body.dark-mode .loader {
+             background: var(--secondary); /* Dark background for loader */
+        }
+        body.dark-mode .eye-loader {
+             background: var(--secondary); /* Dark background for eye */
+        }
+
+
         @keyframes rotate {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-        
+
         @keyframes blink {
             0%, 100% { transform: scale(1); }
             50% { transform: scale(0.8); }
@@ -414,18 +486,19 @@
 
     <!-- Navigation -->
     <nav>
-        <div class="logo">
-            <svg width="120" height="40" viewBox="0 0 250 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M58.5 14L97.7942 77H19.2058L58.5 14Z" fill="none" stroke="#c03a21" stroke-width="8"/>
-                <circle cx="58.5" cy="45.5" r="10.5" fill="#c03a21"/>
-                <path d="M120 30H130C140 30 145 35 145 45C145 55 140 60 130 60H120V30ZM130 52C134 52 136 50 136 45C136 40 134 38 130 38H128V52H130Z" fill="#c03a21"/>
-                <path d="M150 30H173V38H159V41H170V49H159V52H173V60H150V30Z" fill="#c03a21"/>
-                <path d="M180 30H190V47C190 50 192 52 195 52C198 52 200 50 200 47V30H210V47C210 55 204 61 195 61C186 61 180 55 180 47V30Z" fill="#c03a21"/>
-                <path d="M215 30H235C240 30 245 35 245 40C245 45 241 48 238 49L246 60H235L228 50H225V60H215V30ZM234 42C236 42 237 41 237 39C237 37 236 36 234 36H225V42H234Z" fill="#c03a21"/>
-                <path d="M250 30H270C275 30 280 35 280 40C280 45 276 48 273 49L281 60H270L263 50H260V60H250V30ZM269 42C271 42 272 41 272 39C272 37 271 36 269 36H260V42H269Z" fill="#c03a21"/>
-                <path d="M285 30H314V38H304V60H294V38H285V30Z" fill="#c03a21"/>
-            </svg>
-        </div>
+        <a href="#" class="logo"> <!-- Make logo a link -->
+            <svg width="120" height="40" viewBox="0 0 314 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <!-- Nobode Logo SVG -->
+                 <path d="M58.5 14L97.7942 77H19.2058L58.5 14Z" fill="none" stroke="var(--primary)" stroke-width="8"/>
+                 <circle cx="58.5" cy="45.5" r="10.5" fill="var(--primary)"/>
+                 <path d="M120 30H130C140 30 145 35 145 45C145 55 140 60 130 60H120V30ZM130 52C134 52 136 50 136 45C136 40 134 38 130 38H128V52H130Z" fill="var(--primary)"/>
+                 <path d="M150 30H173V38H159V41H170V49H159V52H173V60H150V30Z" fill="var(--primary)"/>
+                 <path d="M180 30H190V47C190 50 192 52 195 52C198 52 200 50 200 47V30H210V47C210 55 204 61 195 61C186 61 180 55 180 47V30Z" fill="var(--primary)"/>
+                 <path d="M215 30H235C240 30 245 35 245 40C245 45 241 48 238 49L246 60H235L228 50H225V60H215V30ZM234 42C236 42 237 41 237 39C237 37 236 36 234 36H225V42H234Z" fill="var(--primary)"/>
+                 <path d="M250 30H270C275 30 280 35 280 40C280 45 276 48 273 49L281 60H270L263 50H260V60H250V30ZM269 42C271 42 272 41 272 39C272 37 271 36 269 36H260V42H269Z" fill="var(--primary)"/>
+                 <path d="M285 30H314V38H304V60H294V38H285V30Z" fill="var(--primary)"/>
+             </svg>
+        </a>
         <div class="menu-actions">
             <button class="mode-toggle" aria-label="Toggle dark mode">
                 <div class="eye"></div>
@@ -438,134 +511,165 @@
         <div class="projects-grid">
             <!-- Project 1 -->
             <div class="project-card hidden" data-project="01">
-                <div class="project-number">01</div>
-                <h2 class="project-title">Nobode</h2>
-                <p class="project-desc">A speculative design project exploring the intersection of AI, identity, and digital sovereignty.</p>
+                 <div class="project-card-content">
+                    <div class="project-number">01</div>
+                    <h2 class="project-title">Nobode</h2>
+                    <p class="project-desc">How is presence recorded digitally? Explore identity and sovereignty through temporal slicing, creating visual 'sediment' from live interaction.</p>
+                 </div>
                 <svg class="project-symbol" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="12" cy="12" r="10" stroke="#c03a21" stroke-width="2"/>
-                    <path d="M12 8L12 16" stroke="#c03a21" stroke-width="2"/>
-                    <path d="M16 12L8 12" stroke="#c03a21" stroke-width="2"/>
+                    <path d="M12 4L20 18H4L12 4Z" stroke="#c03a21" stroke-width="1.5"/>
+                    <circle cx="12" cy="13" r="3" fill="#c03a21" stroke="#c03a21" stroke-width="1"/>
                 </svg>
             </div>
-            
+
             <!-- Project 2 -->
             <div class="project-card hidden" data-project="02">
-                <div class="project-number">02</div>
-                <h2 class="project-title">Perdurant Life Time</h2>
-                <p class="project-desc">An exploration of temporal dimensions and perdurant entities through interactive visualization.</p>
+                 <div class="project-card-content">
+                    <div class="project-number">02</div>
+                    <h2 class="project-title">Perdurant Life Time</h2>
+                    <p class="project-desc">Explore entities that persist through time. An interactive audiovisual system where movement births evolving patterns via cellular automata.</p>
+                 </div>
                 <svg class="project-symbol" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 3L21 18H3L12 3Z" stroke="#c03a21" stroke-width="2"/>
+                    <path d="M4 4H8V8H4V4Z" stroke="#c03a21" stroke-width="1.5"/>
+                    <path d="M16 4H20V8H16V4Z" stroke="#c03a21" stroke-width="1.5"/>
+                    <path d="M4 16H8V20H4V16Z" stroke="#c03a21" stroke-width="1.5"/>
+                    <path d="M16 16H20V20H16V16Z" stroke="#c03a21" stroke-width="1.5"/>
+                    <path d="M12 10V14" stroke="#c03a21" stroke-width="1.5"/>
+                    <path d="M10 12H14" stroke="#c03a21" stroke-width="1.5"/>
                 </svg>
             </div>
-            
+
             <!-- Project 3 -->
             <div class="project-card hidden" data-project="03">
-                <div class="project-number">03</div>
-                <h2 class="project-title">Oceanic Hauntology</h2>
-                <p class="project-desc">A media archaeological exploration of digital hauntology through oceanic metaphors.</p>
+                 <div class="project-card-content">
+                    <div class="project-number">03</div>
+                    <h2 class="project-title">Oceanic Hauntology</h2>
+                    <p class="project-desc">How does the digital past persist? Explore hauntology through oceanic metaphors, interactive waves, and decaying visual echoes.</p>
+                 </div>
                 <svg class="project-symbol" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="12" cy="12" r="5" fill="#c03a21"/>
-                    <circle cx="12" cy="12" r="10" stroke="#c03a21" stroke-width="2" stroke-dasharray="4 2"/>
+                    <path d="M3 12C5.5 7 12 7 12 7S18.5 7 21 12C18.5 17 12 17 12 17S5.5 17 3 12Z" stroke="#c03a21" stroke-width="1.5"/>
+                    <path d="M12 15C13.6569 15 15 13.6569 15 12C15 10.3431 13.6569 9 12 9C10.3431 9 9 10.3431 9 12C9 13.6569 10.3431 15 12 15Z" fill="#c03a21" opacity="0.5"/>
                 </svg>
             </div>
-            
+
             <!-- Project 4 -->
             <div class="project-card hidden" data-project="04">
-                <div class="project-number">04</div>
-                <h2 class="project-title">Reflective Currents</h2>
-                <p class="project-desc">An interactive visualization exploring the reflective nature of digital currents and algorithmic flows.</p>
+                 <div class="project-card-content">
+                    <div class="project-number">04</div>
+                    <h2 class="project-title">Reflective Currents</h2>
+                    <p class="project-desc">How do algorithmic currents reflect us? An interactive visualization exploring energy flows on a virtual loom shaped by your input.</p>
+                 </div>
                 <svg class="project-symbol" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M3 12C3 12 7 5 12 5C17 5 21 12 21 12C21 12 17 19 12 19C7 19 3 12 3 12Z" stroke="#c03a21" stroke-width="2"/>
-                    <circle cx="12" cy="12" r="3" stroke="#c03a21" stroke-width="2"/>
+                    <path d="M12 6V18M6 12H18" stroke="#c03a21" stroke-width="1.5"/>
+                    <path d="M9 9L15 15M15 9L9 15" stroke="#c03a21" stroke-width="1.5" stroke-linecap="round"/>
                 </svg>
             </div>
-            
+
             <!-- Project 5 -->
             <div class="project-card hidden" data-project="05">
-                <div class="project-number">05</div>
-                <h2 class="project-title">Wave Machine</h2>
-                <p class="project-desc">A generative system that explores wave patterns and oceanic dynamics through computational processes.</p>
-                <svg class="project-symbol" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="12" cy="12" r="3" fill="#c03a21"/>
-                    <path d="M5 12C5 8.13401 8.13401 5 12 5" stroke="#c03a21" stroke-width="2"/>
-                    <path d="M19 12C19 15.866 15.866 19 12 19" stroke="#c03a21" stroke-width="2"/>
-                </svg>
+                 <div class="project-card-content">
+                    <div class="project-number">05</div>
+                    <h2 class="project-title">Wave Machine</h2>
+                    <p class="project-desc">Explore oceanic dynamics computationally. A generative textile where interaction creates propagating waves and persistent visual traces.</p>
+                 </div>
+                 <svg class="project-symbol" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                     <path d="M3 12C5 9 9 9 12 12C15 15 19 15 21 12" stroke="#c03a21" stroke-width="1.5"/>
+                     <path d="M3 15C5 12 9 12 12 15C15 18 19 18 21 15" stroke="#c03a21" stroke-width="1.5" opacity="0.6"/>
+                 </svg>
             </div>
-            
+
             <!-- Project 6 -->
             <div class="project-card hidden" data-project="06">
-                <div class="project-number">06</div>
-                <h2 class="project-title">Coral Threads</h2>
-                <p class="project-desc">An exploration of emergent patterns inspired by coral growth and cellular automata.</p>
+                 <div class="project-card-content">
+                    <div class="project-number">06</div>
+                    <h2 class="project-title">Coral Threads</h2>
+                    <p class="project-desc">Witness emergence inspired by coral growth. A living, sonified textile driven by cellular automata reacting to interaction.</p>
+                 </div>
                 <svg class="project-symbol" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect x="6" y="6" width="12" height="12" stroke="#c03a21" stroke-width="2"/>
-                    <circle cx="12" cy="12" r="2" fill="#c03a21"/>
+                    <path d="M12 2V6M12 18V22M6 12H2M22 12H18M18.36 5.64L15.54 8.46M8.46 15.54L5.64 18.36M18.36 18.36L15.54 15.54M8.46 8.46L5.64 5.64" stroke="#c03a21" stroke-width="1.5" stroke-linecap="round"/>
+                    <circle cx="12" cy="12" r="3" stroke="#c03a21" stroke-width="1.5"/>
                 </svg>
             </div>
-            
+
             <!-- Project 7 -->
             <div class="project-card hidden" data-project="07">
-                <div class="project-number">07</div>
-                <h2 class="project-title">Echo Line</h2>
-                <p class="project-desc">A linear echo system that explores temporal feedback and algorithmic resonance.</p>
-                <svg class="project-symbol" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 3L21 18H3L12 3Z" stroke="#c03a21" stroke-width="2"/>
-                </svg>
+                 <div class="project-card-content">
+                    <div class="project-number">07</div>
+                    <h2 class="project-title">Echo Line</h2>
+                    <p class="project-desc">Explore temporal feedback and resonance. A reactive textile visualizing past interactions as decaying linear echoes.</p>
+                 </div>
+                 <svg class="project-symbol" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M4 12H20" stroke="#c03a21" stroke-width="1.5"/>
+                      <path d="M7 12L7 18" stroke="#c03a21" stroke-width="1.5" opacity="0.7"/>
+                      <path d="M12 12L12 18" stroke="#c03a21" stroke-width="1.5" opacity="0.5"/>
+                      <path d="M17 12L17 18" stroke="#c03a21" stroke-width="1.5" opacity="0.3"/>
+                  </svg>
             </div>
-            
+
             <!-- Project 8 -->
             <div class="project-card hidden" data-project="08">
-                <div class="project-number">08</div>
-                <h2 class="project-title">Echo Zimmer</h2>
-                <p class="project-desc">A spatial echo chamber that creates recursive patterns through algorithmic feedback.</p>
-                <svg class="project-symbol" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="12" cy="12" r="5" fill="#c03a21"/>
-                    <circle cx="12" cy="12" r="10" stroke="#c03a21" stroke-width="2" stroke-dasharray="4 2"/>
-                </svg>
+                 <div class="project-card-content">
+                    <div class="project-number">08</div>
+                    <h2 class="project-title">Echo Zimmer</h2>
+                    <p class="project-desc">Interactive system evoking cinematic emotion. A reactive textile generating evolving, atmospheric soundscapes inspired by Hans Zimmer.</p>
+                 </div>
+                 <svg class="project-symbol" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                     <circle cx="12" cy="12" r="10" stroke="#c03a21" stroke-width="1.5" opacity="0.3"/>
+                     <circle cx="12" cy="12" r="6" stroke="#c03a21" stroke-width="1.5" opacity="0.6"/>
+                     <circle cx="12" cy="12" r="2" fill="#c03a21"/>
+                 </svg>
             </div>
-            
+
             <!-- Project 9 -->
             <div class="project-card hidden" data-project="09">
-                <div class="project-number">09</div>
-                <h2 class="project-title">Harmonic Life</h2>
-                <p class="project-desc">A cellular automata system that generates harmonic patterns and sonic landscapes.</p>
-                <svg class="project-symbol" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M3 12C3 12 7 5 12 5C17 5 21 12 21 12C21 12 17 19 12 19C7 19 3 12 3 12Z" stroke="#c03a21" stroke-width="2"/>
-                    <circle cx="12" cy="12" r="3" stroke="#c03a21" stroke-width="2"/>
-                </svg>
+                 <div class="project-card-content">
+                    <div class="project-number">09</div>
+                    <h2 class="project-title">Harmonic Life</h2>
+                    <p class="project-desc">Cellular automata as a music generator. Interact with a grid where evolving patterns create layered harmonic soundscapes.</p>
+                 </div>
+                 <svg class="project-symbol" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                     <path d="M4 12C4 9.23858 6.23858 7 9 7H15C17.7614 7 20 9.23858 20 12C20 14.7614 17.7614 17 15 17H9C6.23858 17 4 14.7614 4 12Z" stroke="#c03a21" stroke-width="1.5"/>
+                     <path d="M12 9V15" stroke="#c03a21" stroke-width="1.5"/>
+                     <path d="M9 12H15" stroke="#c03a21" stroke-width="1.5"/>
+                 </svg>
             </div>
-            
+
             <!-- Project 10 -->
             <div class="project-card hidden" data-project="10">
-                <div class="project-number">10</div>
-                <h2 class="project-title">Dead Life</h2>
-                <p class="project-desc">An exploration of entropy and decay through cellular automata and generative systems.</p>
-                <svg class="project-symbol" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="12" cy="12" r="3" fill="#c03a21"/>
-                    <path d="M5 12C5 8.13401 8.13401 5 12 5" stroke="#c03a21" stroke-width="2"/>
-                    <path d="M19 12C19 15.866 15.866 19 12 19" stroke="#c03a21" stroke-width="2"/>
-                </svg>
+                 <div class="project-card-content">
+                    <div class="project-number">10</div>
+                    <h2 class="project-title">Dead Life</h2>
+                    <p class="project-desc">Explore entropy and decay via cellular automata, inspired by the psychedelic, improvisational sound of the Grateful Dead.</p>
+                 </div>
+                 <svg class="project-symbol" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                     <path d="M12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2ZM9.5 9.5C9.5 8.67157 10.1716 8 11 8H13C13.8284 8 14.5 8.67157 14.5 9.5V9.5C14.5 10.3284 13.8284 11 13 11H11C10.1716 11 9.5 10.3284 9.5 9.5V9.5Z" fill="#c03a21" opacity="0.6"/>
+                     <path d="M12 14C10.3431 14 9 15.3431 9 17H15C15 15.3431 13.6569 14 12 14Z" stroke="#c03a21" stroke-width="1.5"/>
+                 </svg>
             </div>
-            
+
             <!-- Project 11 -->
             <div class="project-card hidden" data-project="11">
-                <div class="project-number">11</div>
-                <h2 class="project-title">Harp Life</h2>
-                <p class="project-desc">A sonification of cellular automata patterns through harp-like resonant structures.</p>
-                <svg class="project-symbol" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect x="6" y="6" width="12" height="12" stroke="#c03a21" stroke-width="2"/>
-                    <circle cx="12" cy="12" r="2" fill="#c03a21"/>
-                </svg>
+                 <div class="project-card-content">
+                    <div class="project-number">11</div>
+                    <h2 class="project-title">Harp Life</h2>
+                    <p class="project-desc">Directly sonify cellular automata patterns. A grid of virtual harp strings plays emergent harmonies as the system evolves.</p>
+                 </div>
+                 <svg class="project-symbol" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                     <path d="M6 4V20M10 4V20M14 4V20M18 4V20M4 8H20M4 16H20" stroke="#c03a21" stroke-width="1.5" stroke-linecap="round"/>
+                 </svg>
             </div>
-            
+
             <!-- Project 12 -->
             <div class="project-card hidden" data-project="12">
-                <div class="project-number">12</div>
-                <h2 class="project-title">Miles Life</h2>
-                <p class="project-desc">A generative system inspired by Miles Davis's improvisational approach, creating emergent patterns through cellular automata.</p>
-                <svg class="project-symbol" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 3L21 18H3L12 3Z" stroke="#c03a21" stroke-width="2"/>
-                </svg>
+                 <div class="project-card-content">
+                    <div class="project-number">12</div>
+                    <h2 class="project-title">Miles Life</h2>
+                    <p class="project-desc">Generative system evoking Miles Davis's electric period, using cellular automata to create atmospheric textures and modal harmonies.</p>
+                 </div>
+                 <svg class="project-symbol" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                     <path d="M12 12C14.7614 12 17 9.76142 17 7C17 4.23858 14.7614 2 12 2C9.23858 2 7 4.23858 7 7C7 9.76142 9.23858 12 12 12ZM12 12V22" stroke="#c03a21" stroke-width="1.5"/>
+                     <path d="M9 22H15" stroke="#c03a21" stroke-width="1.5" stroke-linecap="round"/>
+                 </svg>
             </div>
         </div>
     </div>
@@ -581,10 +685,10 @@
 
     <!-- Project Modal -->
     <div class="modal" id="projectModal">
-        <div class="modal-content">
+        <div class="modal-content-wrapper"> <!-- Use wrapper -->
             <button class="close-modal" aria-label="Close modal"></button>
             <h2 class="project-detail-title">Project Title</h2>
-            <img class="project-image" src="/api/placeholder/800/450" alt="Project Image">
+            <img class="project-image" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Project Image"> <!-- Placeholder image -->
             <div class="project-content">
                 <p>Project content will be loaded here...</p>
             </div>
@@ -592,13 +696,15 @@
     </div>
 
     <script>
-        // Project Data
+        // Project Data with updated descriptions and images
         const projectData = {
             "01": {
                 title: "Nobode",
                 image: "https://media.discordapp.net/attachments/1124116474190114856/1359090350072791284/coolradio__a3df9a6b-b578-4914-b97a-57a435715f0a.png?ex=67f63706&is=67f4e586&hm=0402a46a98d2c014ba56287c1ed29c4d3c50d9c85e49e292a59472584d61746b&=&format=webp&quality=lossless&width=819&height=819",
                 content: `
-                    <p>A speculative design project exploring the intersection of AI, identity, and digital sovereignty.</p>
+                    <p>How is presence recorded digitally? This speculative project explores identity and digital sovereignty through temporal slicing.</p>
+                    <p>Using real-time computer vision, moments of presence are layered into an evolving visual 'sediment'. Control parameters shape how your digital trace persists.</p>
+                    <p>It asks: Can we visualize our digital selves organically? What sovereignty emerges from shaping this reflection?</p>
                     <p><a href="https://hartswf0.github.io/time-tide/adobe-killer.html" target="_blank">View Project</a></p>
                 `
             },
@@ -606,7 +712,9 @@
                 title: "Perdurant Life Time",
                 image: "https://media.discordapp.net/attachments/1124116474190114856/1359067125838512128/Screenshot_20250408-032715.png?ex=67f62165&is=67f4cfe5&hm=9f58d70131dbe6c4e6070beb8a3589477d6aa947f52b9f6e164fadbcc2c7973b&=&format=webp&quality=lossless&width=482&height=1070",
                 content: `
-                    <p>An exploration of temporal dimensions and perdurant entities through interactive visualization.</p>
+                    <p>Beyond fleeting moments, can we interact with entities that *persist*? This system explores perdurance through interaction.</p>
+                    <p>Live motion tracking activates cells governed by cellular automata rules, creating evolving visual patterns and a unique procedural soundscape (Tone.js).</p>
+                    <p>Engage with and shape a system where your actions generate tangible, evolving audiovisual forms.</p>
                     <p><a href="https://hartswf0.github.io/perdurant-life-time/" target="_blank">View Project</a></p>
                 `
             },
@@ -614,7 +722,9 @@
                 title: "Oceanic Hauntology",
                 image: "https://media.discordapp.net/attachments/1124116474190114856/1359062916636348538/Screenshot_20250408-030946.png?ex=67f61d79&is=67f4cbf9&hm=f29741eb260f9e0000ec64f3b54df8f4b8dbe36c9bd339817a00e655a7f69416&=&format=webp&quality=lossless&width=126&height=280",
                 content: `
-                    <p>A media archaeological exploration of digital hauntology through oceanic metaphors.</p>
+                    <p>What traces do digital actions leave? This explores digital hauntology through an interactive 'ocean'.</p>
+                    <p>Interaction creates waves influencing generative threads. A custom slit-scan technique reveals decaying echoes – 'ghosts' of past activity. Emergent CA patterns create 'wave crashes'.</p>
+                    <p>Includes a responsive ambient soundscape. Reflect on how interaction layers build up over time.</p>
                     <p><a href="https://hartswf0.github.io/oceanic-mason/ocean-loom-haunt.html" target="_blank">View Project</a></p>
                 `
             },
@@ -622,7 +732,9 @@
                 title: "Reflective Currents",
                 image: "https://media.discordapp.net/attachments/1124116474190114856/1359060817819074620/Screenshot_20250408-030158.png?ex=67f61b85&is=67f4ca05&hm=beb7b14c6c3585c9a16950c28b6a04b4a7d731818fc624afc3f07c909098560d&=&format=webp&quality=lossless&width=482&height=1070",
                 content: `
-                    <p>An interactive visualization exploring the reflective nature of digital currents and algorithmic flows.</p>
+                    <p>Navigate complex algorithmic flows. This interactive piece explores how digital currents reflect interaction in a meditative way.</p>
+                    <p>Input injects energy into an underlying grid (diffusion/decay simulation). Threads visualize this energy, while a procedural noise field adds depth. Features an integrated sound engine (Tone.js) with distinct voices.</p>
+                    <p>Consider interaction not just as input, but participation in a dynamic, reflective environment.</p>
                     <p><a href="https://hartswf0.github.io/oceanic-mason/nobode-g25-reloom.html" target="_blank">View Project</a></p>
                 `
             },
@@ -630,7 +742,9 @@
                 title: "Wave Machine",
                 image: "https://media.discordapp.net/attachments/1124116474190114856/1359059218573033604/Screenshot_20250408-025525.png?ex=67f61a07&is=67f4c887&hm=47e40961aeeef7d91941aeafdc0e156f94f88da8da710a05773c4148e875cc9f&=&format=webp&quality=lossless&width=482&height=1070",
                 content: `
-                    <p>A generative system that explores wave patterns and oceanic dynamics through computational processes.</p>
+                    <p>How can we model and interact with fluid dynamics? This project explores wave patterns through a generative, reactive system.</p>
+                    <p>Interact with a 'digital textile' of threads. Input creates waves propagating based on thread physics (tension, resonance). A slit-scan technique visualizes the history and decay of energy as fading echoes.</p>
+                    <p>Includes ambient, reactive soundscapes (Web Audio API). Explore complex dynamics and visual persistence.</p>
                     <p><a href="https://hartswf0.github.io/oceanic-mason/ocean-loom-core.html" target="_blank">View Project</a></p>
                 `
             },
@@ -638,7 +752,9 @@
                 title: "Coral Threads",
                 image: "https://media.discordapp.net/attachments/1124116474190114856/1359055699182751785/Screenshot_20250408-024146.png?ex=67f616c0&is=67f4c540&hm=e4aedb70604cb9ad2e04bf31fd861ef21246042cd4e87c1ada0a96ad6ba9d006&=&format=webp&quality=lossless&width=126&height=280",
                 content: `
-                    <p>An exploration of emergent patterns inspired by coral growth and cellular automata.</p>
+                    <p>Nature demonstrates complexity from simple rules. This explores emergence inspired by coral growth and cellular automata.</p>
+                    <p>A CA simulation generates organic patterns. Interaction seeds or disturbs growth. Overlaid threads react visually, creating a dynamic textile. Critically, activity is sonified using harp-like PluckSynths (Tone.js).</p>
+                    <p>Perturb the system and experience the complex, evolving audiovisual patterns.</p>
                     <p><a href="https://hartswf0.github.io/loom-mason.html/conway-harp-loom.html" target="_blank">View Project</a></p>
                 `
             },
@@ -646,7 +762,9 @@
                 title: "Echo Line",
                 image: "https://media.discordapp.net/attachments/1124116474190114856/1359056532930822194/Screenshot_20250408-024407.png?ex=67f61787&is=67f4c607&hm=07e858732cae86a3157bcbd3e69b9eee9d47121dd9ba89ba2e0881acb25cc537&=&format=webp&quality=lossless&width=482&height=1070",
                 content: `
-                    <p>A linear echo system that explores temporal feedback and algorithmic resonance.</p>
+                    <p>How do digital interactions persist and resonate? This system explores temporal feedback using a reactive textile metaphor.</p>
+                    <p>Input sends energy waves through threads. A temporal slit-scan captures and redraws past states as decaying 'echoes', weaving a fabric from moments in time. A subtle background CA adds texture.</p>
+                    <p>Features a responsive pentatonic soundscape (Web Audio API). Reflect on how actions resonate and fade.</p>
                     <p><a href="https://hartswf0.github.io/loom-mason.html/echo-loom-line.html" target="_blank">View Project</a></p>
                 `
             },
@@ -654,7 +772,9 @@
                 title: "Echo Zimmer",
                 image: "https://media.discordapp.net/attachments/1124116474190114856/1359056084773503097/Screenshot_20250408-024321.png?ex=67f6171c&is=67f4c59c&hm=8a370350f4731d6ce3a0af4349303ad76cf0774735bbfa22d20dba73fb9e14a8&=&format=webp&quality=lossless&width=482&height=1070",
                 content: `
-                    <p>A spatial echo chamber that creates recursive patterns through algorithmic feedback.</p>
+                    <p>Can interactive systems possess emotional depth like cinematic scores? This project explores generating rich, evolving soundscapes.</p>
+                    <p>Building on the 'Echo Loom', interaction triggers complex, layered harmonic events using advanced procedural audio (Web Audio API) designed for a cinematic feel (lush reverb, dynamics). Stronger input yields more dramatic textures.</p>
+                    <p>Combines motion analysis, reactive visuals with echoes, and affective sound synthesis.</p>
                     <p><a href="https://hartswf0.github.io/loom-mason.html/echo-loom-zimmer.html" target="_blank">View Project</a></p>
                 `
             },
@@ -662,7 +782,9 @@
                 title: "Harmonic Life",
                 image: "https://media.discordapp.net/attachments/1124116474190114856/1359090804894994493/image.png?ex=67f63772&is=67f4e5f2&hm=c34aeb83b4513d7a5f67d05bd188a19d83539a65d3868abf8ccb21de75343654&=&format=webp&quality=lossless&width=786&height=613",
                 content: `
-                    <p>A cellular automata system that generates harmonic patterns and sonic landscapes.</p>
+                    <p>Can Conway's Game of Life generate music? This system explores harmonic patterns emerging from cellular automata.</p>
+                    <p>Toggle cells on an interactive grid. Evolving patterns (Conway rules) trigger notes based on position using multiple synth voices (Tone.js). Explores rudimentary reinforcement learning to guide towards harmony.</p>
+                    <p>Turns a classic CA into an interactive, generative musical instrument.</p>
                     <p><a href="https://hartswf0.github.io/time-loom/harmonic_life.html" target="_blank">View Project</a></p>
                 `
             },
@@ -670,7 +792,9 @@
                 title: "Dead Life",
                 image: "https://media.discordapp.net/attachments/1124116474190114856/1359090924025548843/image.png?ex=67f6378e&is=67f4e60e&hm=65a9dac630de1e9c4ac66560b1ae3e6a4a2d4a1de228bdc5dced84828dd55686&=&format=webp&quality=lossless&width=786&height=613",
                 content: `
-                    <p>An exploration of entropy and decay through cellular automata and generative systems.</p>
+                    <p>Explore entropy and decay within cellular automata through a specific aesthetic lens inspired by the Grateful Dead.</p>
+                    <p>Each grid cell hosts multiple independent 'voices' (Jerry, Bob, Phil, Keys) evolving via Conway's rules. Active cells trigger corresponding synths (Tone.js) playing psychedelic rock scales.</p>
+                    <p>Uses multi-layered CA and procedural audio synthesis with psychedelic effects ('Cosmic' slider) to evoke controlled chaos.</p>
                     <p><a href="https://hartswf0.github.io/time-loom/dead_life.html" target="_blank">View Project</a></p>
                 `
             },
@@ -678,7 +802,9 @@
                 title: "Harp Life",
                 image: "https://media.discordapp.net/attachments/1124116474190114856/1359091063859445892/image.png?ex=67f637b0&is=67f4e630&hm=8389ef1f285b83bc0ece0fa5ace0522ddce854760eb7ce21035bc7b23cf26168&=&format=webp&quality=lossless&width=786&height=624",
                 content: `
-                    <p>A sonification of cellular automata patterns through harp-like resonant structures.</p>
+                    <p>How can CA patterns be directly translated into musical expression? This project sonifies CA activity using harp-like structures.</p>
+                    <p>A grid represents virtual harp strings, hosting multiple evolving voices (Conway rules). A sequencer sweeps across, triggering harp-like notes (Tone.js PluckSynth) for active voices based on vertical position.</p>
+                    <p>Combines multi-voice CA with step-sequencer sonification, turning the automaton into a generative harp.</p>
                     <p><a href="https://hartswf0.github.io/time-loom/harp_life_compact.html" target="_blank">View Project</a></p>
                 `
             },
@@ -686,7 +812,9 @@
                 title: "Miles Life",
                 image: "https://media.discordapp.net/attachments/1124116474190114856/1359091308022730782/image.png?ex=67f637ea&is=67f4e66a&hm=1b5930ee7a7cff1a8e7908c832dda72d6d5fea3d52332cd443e0d8da70b9b33c&=&format=webp&quality=lossless&width=786&height=624",
                 content: `
-                    <p>A generative system inspired by Miles Davis's improvisational approach, creating emergent patterns through cellular automata.</p>
+                    <p>Can cellular automata evoke the atmosphere of Miles Davis's electric period? This project explores that intersection.</p>
+                    <p>A multi-voice CA represents instruments (Trumpet, Rhodes, Bass, Textures). A sequencer triggers notes based on activity, using synths (Tone.js) voiced for the era and modal scales ('In A Silent Way' feel).</p>
+                    <p>Uses CA not for dense patterns, but as an engine for sparse, atmospheric textures and improvisational interplay.</p>
                     <p><a href="https://hartswf0.github.io/time-loom/miles_life.html" target="_blank">View Project</a></p>
                 `
             }
@@ -698,7 +826,7 @@
         const modeToggle = document.querySelector('.mode-toggle');
         const projectCards = document.querySelectorAll('.project-card');
         const projectModal = document.getElementById('projectModal');
-        const modalContent = projectModal.querySelector('.modal-content');
+        const modalContentWrapper = projectModal.querySelector('.modal-content-wrapper'); // Target wrapper
         const closeModal = projectModal.querySelector('.close-modal');
         const projectDetailTitle = projectModal.querySelector('.project-detail-title');
         const projectImage = projectModal.querySelector('.project-image');
@@ -710,7 +838,7 @@
             setTimeout(() => {
                 loader.classList.add('hidden');
                 body.classList.add('loaded');
-                
+
                 // Animate project cards
                 projectCards.forEach((card, index) => {
                     setTimeout(() => {
@@ -728,21 +856,22 @@
                 });
             });
             closeModal.addEventListener('click', closeProjectModal);
-            
-            // Close modal when clicking outside content
+
+            // Close modal when clicking outside content wrapper
             projectModal.addEventListener('click', (e) => {
-                if (e.target === projectModal) {
+                if (e.target === projectModal) { // Check if click is on backdrop
                     closeProjectModal();
                 }
             });
-            
+
             // Keyboard navigation
             document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape') {
+                if (e.key === 'Escape' && projectModal.classList.contains('active')) {
+                     e.preventDefault(); // Prevent potential browser default escape behavior
                     closeProjectModal();
                 }
             });
-            
+
             // Check for saved color mode
             const savedMode = localStorage.getItem('darkMode');
             if (savedMode === 'true') {
@@ -758,19 +887,19 @@
         function openProjectModal(projectId) {
             const project = projectData[projectId];
             if (!project) return;
-            
+
             projectDetailTitle.textContent = project.title;
             projectImage.src = project.image;
             projectImage.alt = project.title;
-            projectContent.innerHTML = project.content;
-            
+            projectContent.innerHTML = project.content; // Use innerHTML since content includes HTML tags
+
             projectModal.classList.add('active');
-            document.body.style.overflow = 'hidden';
+            body.style.overflow = 'hidden'; // Prevent background scroll
         }
 
         function closeProjectModal() {
             projectModal.classList.remove('active');
-            document.body.style.overflow = 'auto';
+            body.style.overflow = ''; // Restore background scroll
         }
 
         // Initialize on load
